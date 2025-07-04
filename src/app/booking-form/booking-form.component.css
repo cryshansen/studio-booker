@@ -1,0 +1,7 @@
+.selected {
+  background-color: #007bff;
+  color: white;
+}
+button {
+  margin: 4px;
+}

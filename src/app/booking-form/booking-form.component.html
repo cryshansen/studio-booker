@@ -1,0 +1,32 @@
+<h2>Create a Booking</h2>
+
+<form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+  <label>
+    Event Title:
+    <input type="text" formControlName="title" />
+  </label>
+  <br />
+
+  <label>
+    Date:
+    <input type="date" formControlName="date" />
+  </label>
+  <br />
+
+  <h3>Select a Time Slot:</h3>
+  <div *ngFor="let slot of availableSlots()">
+    <button
+      type="button"
+      [disabled]="!slot.available"
+      [class.selected]="isSlotSelected(slot.start)()"
+      (click)="selectSlot(slot.start)"
+    >
+      {{ slot.start }} – {{ slot.end }} ({{ slot.price }})
+    </button>
+  </div>
+
+  <input type="hidden" formControlName="slot" />
+
+  <br />
+  <button type="submit" [disabled]="bookingForm.invalid">Book Now</button>
+</form>
