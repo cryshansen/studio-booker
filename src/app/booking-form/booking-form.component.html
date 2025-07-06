@@ -13,17 +13,18 @@
   </label>
   <br />
 
-  <h3>Select a Time Slot:</h3>
+  <h4>Available Time Slots:</h4>
   <div *ngFor="let slot of availableSlots()">
     <button
       type="button"
+      class="btn btn-outline-primary mb-2"
+      [class.active]="isSlotSelected(slot.start)()"
       [disabled]="!slot.available"
-      [class.selected]="isSlotSelected(slot.start)()"
-      (click)="selectSlot(slot.start)"
-    >
+      (click)="selectSlot(slot.start)">
       {{ slot.start }} – {{ slot.end }} ({{ slot.price }})
     </button>
   </div>
+
 
   <input type="hidden" formControlName="slot" />
 

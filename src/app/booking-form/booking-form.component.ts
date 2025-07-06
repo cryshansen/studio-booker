@@ -1,4 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -10,6 +10,25 @@ import { CommonModule } from '@angular/common';
   styleUrl: 'booking-form.component.css'
 })
 export class BookingFormComponent {
+  @Input() selectedDate: string | null = null;
+  @Input() eventData: any = null;
+  @Output() bookingSubmitted = new EventEmitter<any>();
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['eventData'] && this.eventData) {
+      this.bookingForm.patchValue({
+        title: this.eventData.title || '',
+        date: this.eventData.date || '',
+        slot: this.eventData.slot || '',
+      });
+      this.selectedSlot.set(this.eventData.slot || null);
+    } else if (changes['selectedDate'] && this.selectedDate) {
+      // Reset form for new booking
+      this.bookingForm.reset();
+      this.bookingForm.get('date')?.setValue(this.selectedDate);
+      this.selectedSlot.set(null);
+    }
+  }
   availableSlots = signal([
     { start: '08:00 AM', end: '10:00 AM', price: '$90', available: true },
     { start: '10:00 AM', end: '12:00 PM', price: '$90', available: true },
@@ -36,6 +55,7 @@ export class BookingFormComponent {
   onSubmit() {
     if (this.bookingForm.valid) {
       console.log("Booking Submitted:", this.bookingForm.value);
+       this.bookingSubmitted.emit(this.bookingForm.value);
     }
   }
 

@@ -1,0 +1,18 @@
+<div class="admin-dashboard d-flex">
+  <!-- Calendar Area -->
+  <div class="flex-grow-1 p-3 border-end" style="min-width: 60%;">
+    <app-calendar 
+      (daySelected)="onDaySelected($event)" 
+      (eventClicked)="onEventClicked($event)">
+    </app-calendar>
+  </div>
+
+  <!-- Slide-in Booking Form -->
+  <div class="sidebar-form" [ngClass]="{ show: showForm }">
+    <app-booking-form 
+      [selectedDate]="selectedDate" 
+      [eventData]="selectedEvent" 
+      (formClosed)="closeForm()">
+    </app-booking-form>
+  </div>
+</div>
