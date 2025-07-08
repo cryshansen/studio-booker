@@ -1,41 +1,63 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { FullCalendarModule } from '@fullcalendar/angular';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { FullCalendarModule } from '@fullcalendar/angular'; 
+import { EventClickArg } from '@fullcalendar/core';
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
+
 import dayGridPlugin from '@fullcalendar/daygrid';
 import bootstrap5Plugin from '@fullcalendar/bootstrap5';
+
 
 @Component({
   standalone: true,
   selector: 'app-calendar',
-  imports: [FullCalendarModule],
+  imports: [CommonModule, FullCalendarModule],
   templateUrl: './calendar.component.html',
-  styleUrl: './calendar.component.css'
+  styleUrls: ['./calendar.component.css']
 })
-export class CalendarComponent {
+export class CalendarComponent implements OnInit {
+  studioId!: number;
+  calendarOptions: any;
   @Output() daySelected = new EventEmitter<string>();
   @Output() eventClicked = new EventEmitter<any>();
 
-   calendarOptions = {
-    plugins: [dayGridPlugin, bootstrap5Plugin],
-    initialView: 'dayGridMonth',
-    themeSystem: 'bootstrap5',
-    events: [
-      { title: 'Booking A', date: '2025-07-08' },
-      { title: 'Booking B', date: '2025-07-10' }
-    ],
-    dateClick: this.handleDateClick.bind(this),
-    eventClick: this.handleEventClick.bind(this)
-  };
+  constructor(private route: ActivatedRoute) {}
 
-  handleDateClick(arg: any) {
-    this.daySelected.emit(arg.dateStr); // emits "YYYY-MM-DD"
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.studioId = Number(params.get('studioId'));
+      console.log('Loaded studio:', this.studioId);
+
+      this.calendarOptions = {
+        plugins: [dayGridPlugin, bootstrap5Plugin,interactionPlugin],
+        initialView: 'dayGridMonth',
+        themeSystem: 'bootstrap5',
+        selectable: true,
+        selectMirror: true,
+        selectHelper: true,
+        dateClick: (arg:DateClickArg) => {
+          console.log('CLICKED ✅', arg);
+          alert(`You clicked on: ${arg.dateStr}`);
+        },
+        eventClick: (arg: EventClickArg) => { 
+          console.log('CLICKED ✅', arg);
+          alert(`You clicked on event: ${arg}`);
+        },
+        events: [
+          { title: `Studio ${this.studioId} Booking A`, date: '2025-07-08' },
+          { title: `Studio ${this.studioId} Booking B`, date: '2025-07-10' }
+        ],
+        
+      };
+    });
   }
 
-  handleEventClick(arg: any) {
-    const eventData = {
-      title: arg.event.title,
-      date: arg.event.startStr,
-      id: arg.event.id
-    };
-    this.eventClicked.emit(eventData);
+  handleDateClick(arg: DateClickArg) {
+    console.log('✅ Date clicked:', arg.dateStr);
+  }
+
+  handleEventClick(arg: EventClickArg) {
+    console.log('🗓 Event clicked:', arg.event.title);
   }
 }

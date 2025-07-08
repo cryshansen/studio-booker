@@ -1,0 +1,27 @@
+
+<!-- Login Page start -->
+<div class="jumbotron">
+  <div id="signInContainer" class="container">
+    <h1 class="pt-5 pb-5">
+    Studio Booking Login 
+  </h1>
+    <div class="alignCenter form-horizontal">
+    <h2 class="h3 mb-3 fw-normal">Please sign in</h2>
+      <form name="loginForm" class="form-group">
+          <input ng-model="user.userName" class="form-control" required placeholder="username" />
+          <span ng-show="loginForm.userName.$touched && loginForm.userName.$invalid">The username is required.</span>
+          <input ng-model="user.password" required class="form-control inputText marginTop20" type="password" placeholder="password" />
+          <span ng-show="loginForm.password.$touched && loginForm.password.$invalid">The password is required.</span>
+      </form> 
+      <div class="checkbox mb-3">
+      <label>
+        <input type="checkbox" value="remember-me"> Remember me
+      </label>
+    </div>
+      <div class="">
+        <div class="btn btn-primary m-1" ui-sref="calendar">Sign In</div>
+        <div ui-sref="signUp" class="btn btn-secondary m-1">Sign up</div>
+      </div>
+    </div>
+  </div>
+</div>

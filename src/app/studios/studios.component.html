@@ -1,0 +1,68 @@
+
+<div class = "container mt-5">
+		
+    <h1>Studio Directory</h1>
+    <hr/>
+    <h1>Studio Rental Rates:</h1>
+    <p>Starting at $90 for 2 consecutive hours (minimum rental), $45 for each additional hour. Discounts for half day, full day, and weekend rentals. Arrive and Leave on time. All set-up and clean-up needs to be done during rented time.  Studio must be returned to original condition when you studio session time is up. Eg: moving of various items, garbage removed, various cleanup. </p>
+    <p>100% payment is required to book the space and booking is on a first-come first-served basis. Deposit can be paid by e-mail money transfer (preferred), cash, or credit card.  You have up to 72 hours before your rental period to cancel or make changes (if possible) to your reservation. There will not be any reimbursement if you cancel or make changes less than 72 hours before the beginning of your rental period.</p>
+    
+    <p>Limited Memberships also available.</p>
+    
+    <h3>Membership [*Currently Closed*]</h3>
+    <p>(limit 5)</p>
+    <ul>
+        <li>$300/month (1 year contract)</li>
+        <li>12hr studio time per month</li>
+        <li>Use of props/backdrops/lighting equipment</li>
+        <li>25% off additional monthly hours</li>
+        <li>Additional Membership Benefits</li>
+        <li>Priority Studio Booking</li>
+        <li>Personal building & studio entrance code</li>
+        <li>Locked storage access</li>
+    </ul>
+
+<div class="container mt-5">
+  <h3 class="mb-4">Available Studios</h3>
+
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Size (sq ft)</th>
+          <th>Availability</th>
+          <th>Accessories</th>
+          <th class="text-end">Price</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of studios">
+          <td>{{ s.studioId }}</td>
+          <td>{{ s.studioName }}</td>
+          <td>{{ s.studioDescription }}</td>
+          <td>{{ s.studioSizeSq }}</td>
+          <td>
+            <span class="badge bg-success" *ngIf="s.studioAvailability === 1">Available</span>
+            <span class="badge bg-secondary" *ngIf="s.studioAvailability === 0">Unavailable</span>
+          </td>
+          <td>{{ s.studioAccessories }}</td>
+          <td class="text-end">{{ s.price | currency }}</td>
+          <td>
+            <button 
+              class="btn btn-sm btn-primary" 
+              [disabled]="s.studioAvailability === 0"
+              (click)="bookStudio(s.studioId)">
+              <i class="fa fa-calendar"></i> Book
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</div>

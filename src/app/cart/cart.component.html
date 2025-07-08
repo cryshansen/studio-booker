@@ -1,0 +1,68 @@
+<p>cart works!</p>
+ <div class="container"  ng-controller="cartCtrl">
+   <a href="calendar" class="btn btn-link"> <i class="fa fa-arrow-left"></i> Back to Calendar</a>
+    <div>
+        <h2>Studio Booking Cart</h2>
+    </div>
+    <div class="table-responsive">
+    <table class="table table-hover table-bordered align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Studio</th>
+          <th scope="col">Date & Time</th>
+          <th scope="col" class="text-end">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Studio A - Portrait Room</td>
+          <td>Aug 10, 2025 — 2:00 PM</td>
+          <td class="text-end">$120</td>
+        </tr>
+        <tr>
+          <td>Studio B - Natural Light</td>
+          <td>Aug 12, 2025 — 10:30 AM</td>
+          <td class="text-end">$95</td>
+        </tr>
+        <tr>
+          <td>Studio C - Creative Loft</td>
+          <td>Aug 15, 2025 — 5:00 PM</td>
+          <td class="text-end">$150</td>
+        </tr>
+        <tr *ngFor="let booking of bookings">
+            <td>{{ booking.studio }}</td>
+            <td>{{ booking.date | date:'medium' }}</td>
+            <td class="text-end">{{ booking.price | currency }}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="2" class="text-end">Total</th>
+          <th class="text-end">$365</th>
+        </tr>
+      </tfoot>
+    </table>
+    <div class="text-center">
+         <a href="checkout" class="btn btn-light">Checkout <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a>
+    </div>
+  </div><!-- table responsive -->
+
+</div>
+<!-- /.container -->
+<!--    
+<div class="panel panel-primary" ng-repeat="d in bookingCart">
+    <div ng-if="d.studio != ''">
+        <div class="panel-body">
+            <div class="container" style="width:100%;">			        	
+                <div class="row">
+                        <h3 class="panel-title">{{ studio name }} </h3>
+                    <div class="col "> {{ start }}</div> 
+                    <div class="col ">  end </div>
+                    <div class="col"> price </div> 
+                    <div class="col"> Reserved </div>
+                </div>
+            </div>	
+        </div> 
+    </div> 
+                
+</div> --> <!-- /.ng-if left -->

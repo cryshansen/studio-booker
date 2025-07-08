@@ -1,2 +1,9 @@
-<h2 class="mb-4">Booking Calendar</h2>
-<full-calendar [options]="calendarOptions"></full-calendar>
+
+<div class="container mt-5">
+  <a href="studios" class="btn btn-link"><i class="fa fa-arrow-left"></i> Back to Studios</a>
+  <h2 class="mb-4">Studio Calendar (Studio ID: {{ studioId }})</h2>
+
+  <full-calendar
+    [options]="calendarOptions" >
+  </full-calendar>
+</div>
