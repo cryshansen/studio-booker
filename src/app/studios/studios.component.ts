@@ -1,17 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+
+import { SpinnerComponent } from '../spinner/spinner.component';
+
+interface Studio {
+  studioId: number;
+  studioName: string;
+  studioDescription: string;
+  studioSizeSq: number;
+  studioAvailability: number;
+  studioAccessories: string;
+  price: number;
+}
 
 @Component({
   standalone: true,
   selector: 'app-studios',
-  imports: [CommonModule],
+  imports: [CommonModule, SpinnerComponent],
   templateUrl: './studios.component.html',
   styleUrl: './studios.component.css'
 })
-export class StudiosComponent {
-  constructor(private router: Router) {}
-  studios = [
+export class StudiosComponent implements OnInit  {
+  loading = true;
+ 
+  studios: Studio[] = [];
+  studios1: Studio[] = [
     {
       studioId: 1,
       studioName: 'Studio A - Portrait Room',
@@ -40,12 +54,22 @@ export class StudiosComponent {
       price: 130
     }
   ];
+   constructor(private router: Router) {}
 
-  bookStudio(id: number) {
-  console.log('Booking studio with ID:', id);
-  this.router.navigate(['/calendar', id]);
-  // Navigate or store ID for booking here
+ngOnInit() {
+  // Simulate fetch delay (replace with real API call)
+  setTimeout(() => {
+    this.studios = this.studios1;
+    this.loading = false;
+  }, 1000);
 }
+  bookStudio(id: number,price: number, name: string) {
+    console.log('Booking studio with ID:', id);
+    console.log('Booking studio price:', price);
+    console.log('Booking studio name:', name);
+    this.router.navigate(['/calendar', id ],{ queryParams: { price, name } } );
+    // Navigate or store ID for booking here
+  }
 
 
 

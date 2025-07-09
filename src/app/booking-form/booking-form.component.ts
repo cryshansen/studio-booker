@@ -12,13 +12,32 @@ import { CommonModule } from '@angular/common';
 export class BookingFormComponent {
   @Input() selectedDate: string | null = null;
   @Input() eventData: any = null;
+  @Input() studioId: number | null = null;
+  @Input() studioName: string | null = null;
+  @Input() studioPrice: number | null = null;
   @Output() bookingSubmitted = new EventEmitter<any>();
+  @Output() formClosed = new EventEmitter<void>();
+
+   availableSlots = signal([
+    { start: '08:00 AM', end: '10:00 AM', price: '$90', available: true },
+    { start: '10:00 AM', end: '12:00 PM', price: '$90', available: true },
+    { start: '12:00 PM', end: '2:00 PM', price: '$90', available: false },
+  ]);
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['studioPrice'] && this.studioPrice !== null) {
+      this.bookingForm.get('studioPrice')?.setValue(this.studioPrice);
+      this.availableSlots.set([
+        { start: '08:00 AM', end: '10:00 AM', price: `$${this.studioPrice}`, available: true },
+        { start: '10:00 AM', end: '12:00 PM', price: `$${this.studioPrice}`, available: true },
+        { start: '12:00 PM', end: '2:00 PM', price: `$${this.studioPrice}`, available: false },
+      ]);
+    }
+
     if (changes['eventData'] && this.eventData) {
       this.bookingForm.patchValue({
         title: this.eventData.title || '',
-        date: this.eventData.date || '',
+        date: this.eventData.startStr || '',
         slot: this.eventData.slot || '',
       });
       this.selectedSlot.set(this.eventData.slot || null);
@@ -28,12 +47,12 @@ export class BookingFormComponent {
       this.bookingForm.get('date')?.setValue(this.selectedDate);
       this.selectedSlot.set(null);
     }
+    if (this.studioId !== null) {
+      this.bookingForm.get('studioId')?.setValue(this.studioId);
+    }
+    
   }
-  availableSlots = signal([
-    { start: '08:00 AM', end: '10:00 AM', price: '$90', available: true },
-    { start: '10:00 AM', end: '12:00 PM', price: '$90', available: true },
-    { start: '12:00 PM', end: '2:00 PM', price: '$90', available: false },
-  ]);
+ 
 
   selectedSlot = signal<string | null>(null);
 
@@ -44,9 +63,14 @@ export class BookingFormComponent {
       title: ['', Validators.required],
       date: ['', Validators.required],
       slot: ['', Validators.required],
+      studioId: [this.studioId],
+      price: [this.studioPrice]
     });
   }
 
+
+
+  
   selectSlot(slot: string) {
     this.selectedSlot.set(slot);
     this.bookingForm.get('slot')?.setValue(slot);
@@ -54,11 +78,23 @@ export class BookingFormComponent {
 
   onSubmit() {
     if (this.bookingForm.valid) {
-      console.log("Booking Submitted:", this.bookingForm.value);
-       this.bookingSubmitted.emit(this.bookingForm.value);
+     
+       const formValue = {
+        ...this.bookingForm.value,
+        studioName: this.studioName,
+        studioId: this.studioId,
+        price: this.studioPrice
+      };
+       console.log("Booking Submitted:", formValue);
+       this.bookingSubmitted.emit(formValue);
     }
   }
 
   isSlotSelected = (slot: string) =>
     computed(() => this.selectedSlot() === slot);
+
+
+
+
+
 }

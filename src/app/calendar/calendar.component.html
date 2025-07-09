@@ -1,9 +1,21 @@
 
-<div class="container mt-5">
-  <a href="studios" class="btn btn-link"><i class="fa fa-arrow-left"></i> Back to Studios</a>
-  <h2 class="mb-4">Studio Calendar (Studio ID: {{ studioId }})</h2>
+<div class="container dashboard mt-5">
+  <a href="" class="btn btn-link"><i class="fa fa-arrow-left"></i> Back to Studios</a>
+  <h2 class="mb-4">{{studioName}} Studio Calendar (Studio ID: {{ studioId }})</h2>
 
   <full-calendar
     [options]="calendarOptions" >
   </full-calendar>
 </div>
+  <!-- Slide-in Booking Form -->
+  <div class="sidebar-form" [ngClass]="{ show: showForm }">
+    <app-booking-form 
+      [selectedDate]="selectedDate" 
+      [eventData]="selectedEvent" 
+      [studioId]="studioId"
+      [studioPrice]="studioPrice"
+      [studioName]="studioName"
+      (bookingSubmitted)="handleBooking($event)"
+      (formClosed)="closeForm()">
+    </app-booking-form>
+  </div>

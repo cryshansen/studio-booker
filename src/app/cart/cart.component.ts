@@ -1,21 +1,36 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+
+import { CartService } from '../services/cart.service';
+
 
 
 @Component({
   standalone: true,
   selector: 'app-cart',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.css'
 })
 export class CartComponent {
+ cartItems: any[] = [];
 
+  constructor(private cartService: CartService) {}
+  ngOnInit() {
+    this.cartItems = this.cartService.getCartItems();
+    console.log('🛒 Cart contents:', this.cartItems);
+  }
+  
+ remove(index:number){
+  console.log(index);
+  this.cartService.removeItem(index);
+  this.cartItems = this.cartService.getCartItems(); // refresh after removal
+ }
 
-bookings = [
-  { studio: 'Studio A - Portrait Room', date: new Date(2025, 7, 10, 14, 0), price: 120 },
-  { studio: 'Studio B - Natural Light', date: new Date(2025, 7, 12, 10, 30), price: 95 },
-  { studio: 'Studio C - Creative Loft', date: new Date(2025, 7, 15, 17, 0), price: 150 }
-];
+  getTotal(): number {
+    return this.cartItems.reduce((total, item) => total + (item.price || 0), 0);
+  }
+
 
 }

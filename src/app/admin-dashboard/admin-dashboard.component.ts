@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './admin-dashboard.component.css'
 })
 export class AdminDashboardComponent {
- selectedDate: string | null = null;
+  selectedDate: string | null = null;
   selectedEvent: any = null;
   showForm = false;
 

@@ -4,6 +4,9 @@
   <label>
     Event Title:
     <input type="text" formControlName="title" />
+    <div *ngIf="bookingForm.get('title')?.touched && bookingForm.get('title')?.invalid" class="text-danger">
+      Title is required.
+    </div>
   </label>
   <br />
 
@@ -11,6 +14,9 @@
     Date:
     <input type="date" formControlName="date" />
   </label>
+  <div *ngIf="bookingForm.get('date')?.touched && bookingForm.get('date')?.invalid" class="text-danger">
+    Date is required.
+  </div>
   <br />
 
   <h4>Available Time Slots:</h4>
@@ -24,10 +30,13 @@
       {{ slot.start }} – {{ slot.end }} ({{ slot.price }})
     </button>
   </div>
-
-
+  <div *ngIf="bookingForm.get('slot')?.touched && bookingForm.get('slot')?.invalid" class="text-danger">
+    Please select a time slot.
+  </div>
   <input type="hidden" formControlName="slot" />
-
+  <input type="hidden" formControlName="studioId" />
+  <input type="hidden" formControlName="price" />
   <br />
+  <button type="button" class="btn btn-secondary" (click)="formClosed.emit()">Cancel</button>
   <button type="submit" [disabled]="bookingForm.invalid">Book Now</button>
 </form>

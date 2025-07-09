@@ -1,9 +1,8 @@
-<p>cart works!</p>
- <div class="container"  ng-controller="cartCtrl">
-   <a href="calendar" class="btn btn-link"> <i class="fa fa-arrow-left"></i> Back to Calendar</a>
-    <div>
-        <h2>Studio Booking Cart</h2>
-    </div>
+
+ <div class="container my-5"  ng-controller="cartCtrl">
+   <a href="" class="btn btn-link"> <i class="fa fa-arrow-left"></i> Back to Studios</a>
+    <h2 class="my-5" >Studio Booking Cart</h2>
+
     <div class="table-responsive">
     <table class="table table-hover table-bordered align-middle">
       <thead class="table-dark">
@@ -14,36 +13,30 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Studio A - Portrait Room</td>
-          <td>Aug 10, 2025 — 2:00 PM</td>
-          <td class="text-end">$120</td>
-        </tr>
-        <tr>
-          <td>Studio B - Natural Light</td>
-          <td>Aug 12, 2025 — 10:30 AM</td>
-          <td class="text-end">$95</td>
-        </tr>
-        <tr>
-          <td>Studio C - Creative Loft</td>
-          <td>Aug 15, 2025 — 5:00 PM</td>
-          <td class="text-end">$150</td>
-        </tr>
-        <tr *ngFor="let booking of bookings">
-            <td>{{ booking.studio }}</td>
-            <td>{{ booking.date | date:'medium' }}</td>
-            <td class="text-end">{{ booking.price | currency }}</td>
+        <tr *ngFor="let item of cartItems; let i = index">
+            <td><button (click)="remove(i)">Remove</button> {{ item.studio }}  - {{ item.title }}</td>
+            <td>{{ item.date | date:'medium' }} {{ item.date }} at {{ item.slot }}</td>
+            <td class="text-end">{{ item.price | currency }} </td>
         </tr>
       </tbody>
       <tfoot>
         <tr>
           <th colspan="2" class="text-end">Total</th>
-          <th class="text-end">$365</th>
+          <th class="text-end">{{ getTotal() | currency }}</th>
         </tr>
       </tfoot>
     </table>
     <div class="text-center">
-         <a href="checkout" class="btn btn-light">Checkout <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a>
+       <button 
+          class="btn btn-light"
+          [routerLink]="['/checkout']"
+          [disabled]="cartItems.length === 0">
+          <i 
+            class="fa-solid" 
+            [ngClass]="cartItems.length === 0 ? 'fa-ban' : 'fa-check'">
+          </i>
+          Checkout
+        </button>
     </div>
   </div><!-- table responsive -->
 

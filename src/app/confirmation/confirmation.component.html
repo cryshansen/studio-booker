@@ -1,0 +1,52 @@
+
+<div id="pdf-content" class="container my-5" ng-controller="payCtrl">
+    <div class="row">
+         <div class="" style='position: relative; justify-content: end;display: flex; top: -30px;'>
+            <button class="btn btn-outline-secondary" (click)="printConfirmation()">
+            <i class="fa fa-print"></i> Print PDF
+        </button>
+        </div>
+        <h3>Booking Confirmation</h3>
+
+        <h4 class="mt-5"> Congratulations, {{ firstName }} {{ lastName }}!</h4>
+        <p><strong>Confirmation ID:</strong> {{ confirmationId }}</p>
+		<p> Your payment was processed for your order.
+		 	You should receive an email confirmation of your booking studio and times. 
+		 	Please contact us if you do not receive any email. </p> 
+        <table class="table mt-4">
+            <thead>
+            <tr>
+                <th>Studio</th>
+                <th>Date</th>
+                <th>Time Slot</th>
+                <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of cart">
+                <td>{{ item.studioName }}</td>
+                <td>{{ item.date | date }}</td>
+                <td>{{ item.slot }}</td>
+                <td>{{ item.price | currency }}</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3"><strong>Total</strong></td>
+                <td><strong>{{ total | currency }}</strong></td>
+            </tr>
+            </tfoot>
+        </table>
+        <div class="col-3">
+            <a routerLink="/studios" class="btn btn-outline-primary mt-4">
+            <i class="fa fa-arrow-left"></i> Book Another Studio
+            </a>
+        </div>
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <a href="#" class="text-decoration-none text-dark"><i class="fab fa-facebook fa-2x"></i></a>
+            <a href="#" class="text-decoration-none text-dark"><i class="fab fa-twitter fa-2x"></i></a>
+            <a href="#" class="text-decoration-none text-dark"><i class="fab fa-instagram fa-2x"></i></a>
+            <a href="#" class="text-decoration-none text-dark"><i class="fab fa-linkedin fa-2x"></i></a>
+        </div>
+    </div>  	
+</div>
