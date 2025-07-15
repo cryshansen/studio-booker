@@ -10,7 +10,7 @@ import bootstrap5Plugin from '@fullcalendar/bootstrap5';
 
 
 import { CartService } from '../services/cart.service';
-
+import { ContactPrefillService } from '../services/contact-prefill.service';
 
 
 @Component({
@@ -34,7 +34,7 @@ export class CalendarComponent implements OnInit {
 
 
 
-  constructor(private route: ActivatedRoute, private cartService: CartService) {}
+  constructor(private route: ActivatedRoute, private cartService: CartService, private contactPrefill: ContactPrefillService) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -76,6 +76,9 @@ export class CalendarComponent implements OnInit {
 /** when the day is selected passes data to booking form  */
   onDaySelected(date: string) {
     console.log('🗓 Event date:', date);
+    this.contactPrefill.setPrefill({
+      subject: `Booking Inquiry for ${this.studioName} ${date}`,
+    });
     this.selectedDate = date;
     this.selectedEvent = null;
     this.showForm = true;
@@ -85,6 +88,11 @@ export class CalendarComponent implements OnInit {
     this.selectedEvent = event;
     this.selectedDate = event.startStr;
     console.log('🗓 Event date:', event.startStr);
+
+    this.contactPrefill.setPrefill({
+      subject: `Booking Inquiry for ${this.studioName} ${event.startStr}`,
+    });
+
     this.showForm = true;
     console.log('🗓 Event clicked:', event.title);
   }

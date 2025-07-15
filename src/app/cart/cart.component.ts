@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { CartService } from '../services/cart.service';
+import { ContactPrefillService } from '../services/contact-prefill.service';
 
 
 
@@ -16,10 +17,22 @@ import { CartService } from '../services/cart.service';
 export class CartComponent {
  cartItems: any[] = [];
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService, private contactPrefill:ContactPrefillService) {}
   ngOnInit() {
     this.cartItems = this.cartService.getCartItems();
     console.log('🛒 Cart contents:', this.cartItems);
+     const bookingSummary = this.cartItems.map(item => {
+      const studio = item.title || 'Studio';
+      const date = item.date || '';
+      const slot = item.slot || '';
+      return `${studio} on ${date} (${slot})`;
+    })
+    .join(', ');
+
+    this.contactPrefill.setPrefill({ 
+        subject: `Booking Inquiry for: ${bookingSummary}`,
+        message: `Hello, I'm inquiring about the following bookings: ${bookingSummary}`
+    });
   }
   
  remove(index:number){

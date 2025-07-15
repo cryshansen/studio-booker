@@ -8,7 +8,7 @@
   </div>
 
   <!-- Slide-in Booking Form -->
-  <div class="sidebar-form" [ngClass]="{ show: showForm }">
+  <div class="sidebar-form" *ngIf="showForm">
     <app-booking-form 
       [selectedDate]="selectedDate" 
       [eventData]="selectedEvent" 

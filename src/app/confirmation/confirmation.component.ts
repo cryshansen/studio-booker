@@ -11,7 +11,7 @@ import html2pdf from 'html2pdf.js';
   templateUrl: './confirmation.component.html',
   styleUrl: './confirmation.component.css'
 })
-export class ConfirmationComponent {
+export class ConfirmationComponent implements OnInit{
 
 
   firstName = '';

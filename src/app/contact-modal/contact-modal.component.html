@@ -1,0 +1,51 @@
+<div #modalElement class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-0">
+      <form [formGroup]="contactForm" (ngSubmit)="submitForm()">
+        <div class="modal-header">
+          <h3 id="contactModalLabel" class="modal-title">Send a message.</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="fullname" class="form-label">Full Name</label>
+              <input type="text" id="fullname" class="form-control" formControlName="fullname" required />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="phone" class="form-label">Phone</label>
+              <input type="text" id="phone" class="form-control" formControlName="phone" required />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">E-Mail Address</label>
+            <input type="email" id="email" class="form-control" formControlName="email" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="subject" class="form-label">Subject</label>
+            <input type="text" id="subject" class="form-control" formControlName="subject" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="textbox_msg" class="form-label">Collaborate:</label>
+            <textarea id="textbox_msg" class="form-control" formControlName="textbox_msg" rows="4" required></textarea>
+          </div>
+
+          <div *ngIf="error" class="text-danger">{{ error }}</div>
+          <div *ngIf="message" class="text-success">{{ message }}</div>
+
+          <!-- Optional: reCAPTCHA -->
+          <!-- <div #captchaRef id="captcha1" class="d-flex justify-content-center mb-3"></div> -->
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!contactForm.valid">Send</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

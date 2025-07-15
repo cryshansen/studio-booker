@@ -13,7 +13,7 @@
   top: 0;
   right: 0;
   width: 35%;
-  max-width: 400px;
+  max-width: 500px;
   height: 100%;
   background-color: #f8f9fa;
   box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
@@ -21,8 +21,28 @@
   transition: transform 0.3s ease-in-out;
   z-index: 10;
   padding: 1rem;
+  overflow-y: auto;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .sidebar-form.show {
   transform: translateX(0%);
+  opacity:1;
+  pointer-events:auto;
+}
+/* 🔁 Responsive: full screen on mobile */
+@media (max-width: 768px) {
+  .sidebar-form {
+    width: 100%;
+    max-width: none;
+    left: 0;
+    right: 0;
+    height: 100%;
+    transform: translateY(100%);
+  }
+
+  .sidebar-form.show {
+    transform: translateY(0%);
+  }
 }

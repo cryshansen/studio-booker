@@ -23,3 +23,19 @@
 .sidebar-form.show {
   transform: translateX(0%);
 }
+
+/* 🔁 Responsive: full screen on mobile */
+@media (max-width: 768px) {
+  .sidebar-form {
+    width: 100%;
+    max-width: none;
+    left: 0;
+    right: 0;
+    height: 100%;
+    transform: translateY(100%);
+  }
+
+  .sidebar-form.show {
+    transform: translateY(0%);
+  }
+}

@@ -1,4 +1,6 @@
-<app-header></app-header>
+<app-header (contactClick)="contactModal.show()"></app-header>
 
 <app-spinner *ngIf="loading"></app-spinner>
 <router-outlet/>
+<app-contact-modal #contactModal></app-contact-modal>
+

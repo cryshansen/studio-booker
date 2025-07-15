@@ -4,6 +4,7 @@
 	<a type="button" class="btn btn-link my-2" href="cart"> <i class="fa fa-arrow-left"></i> Cart</a>
 
 	<h3>Checkout Studio Bookings</h3>
+  <p class="alert alert-warning"> This collection of information is not kept nor stored at this time but is only for demonstration purposes. Please Contact us if you wish to book via contact button above to collect this information. To continue will product a confirmation page and pdf to download only. </p>
   <main>
     <div class="row g-5">
       <div class="col-md-5 col-lg-4 order-md-last">
@@ -46,7 +47,7 @@
           <div class="row g-3">
             <div class="col-sm-6">
               <label for="firstName" class="form-label">First name</label>
-              <input type="text" class="form-control" id="firstName" placeholder="" value="" required="">
+              <input (change)="onFormChange()"  type="text" class="form-control" id="firstName" placeholder="" value="" required="">
               <div class="invalid-feedback">
                 Valid first name is required.
               </div>
@@ -54,7 +55,7 @@
 
             <div class="col-sm-6">
               <label for="lastName" class="form-label">Last name</label>
-              <input type="text" class="form-control" id="lastName" placeholder="" value="" required="">
+              <input  (change)="onFormChange()" type="text" class="form-control" id="lastName" placeholder="" value="" required="">
               <div class="invalid-feedback">
                 Valid last name is required.
               </div>
@@ -68,7 +69,7 @@
 
             <div class="col-12">
               <label for="email" class="form-label">Email*</label>
-              <input type="email" class="form-control" id="email" placeholder="you@example.com" required >
+              <input (change)="onFormChange()" type="email" class="form-control" id="email" placeholder="you@example.com" required >
               <div class="invalid-feedback">
                 Please enter a valid email address for shipping updates.
               </div>
@@ -118,9 +119,9 @@
             </div>
           </div>
 
-          <hr class="my-4">
+          <!-- <hr class="my-4"> -->
 
-          <div class="form-check">
+         <!-- <div class="form-check">
             <input type="checkbox" class="form-check-input" id="same-address">
             <label class="form-check-label" for="same-address">Shipping address is the same as my billing address</label>
           </div>
@@ -128,12 +129,12 @@
           <div class="form-check">
             <input type="checkbox" class="form-check-input" id="save-info">
             <label class="form-check-label" for="save-info">Save this information for next time</label>
-          </div>
+          </div>--> 
 
           <hr class="my-4">
 
           <h4 class="mb-3">Payment</h4>
-
+          <p class="alert alert-warning"> This collection of information is not kept in any way but is only for demonstration purposes. Please Contact us if you wish to book via contact button above to allow us to collect this information. Proceeding with only offer a confirmation message and pdf download for demo purposes only. </p>
           <div class="my-3">
             <div class="form-check">
               <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked="" required="">
