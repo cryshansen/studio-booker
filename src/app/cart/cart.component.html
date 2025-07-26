@@ -1,7 +1,10 @@
 <main>
-    <div class="container mx-5" style="max-width: 1320px;">
+    <div class="container my-5" style="max-width: 1320px;">
       <div class="cart">
-        <h2>🛒 Your Cart</h2>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2>🛒 Your Cart</h2>     
+          <button class="btn btn-danger btn-sm text-align-right justify-content-end" (click)="clearCart()">Clear Cart</button>
+         </div>
         <ul class="list-group">
           <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let booking of bookings$ | async">
             <span>{{booking.studioName}} {{ booking.bdate }}  {{ booking.btime }} - {{ booking.price | currency }} — ID: {{ booking.id }}</span>
@@ -12,19 +15,20 @@
           Cart is empty.
         </div>
       </div>
-      <button class="btn btn-success btn-sm"  [routerLink]="['/']"><i class="fa-solid fa-arrow-left"></i> Booking </button>
-      <ng-container *ngIf="bookings$ | async as bookings">
-        <button 
-          class="btn btn-light"
-          [routerLink]="['/checkout']"
-          [disabled]="bookings.length === 0">
-          <i 
-            class="fa-solid" 
-            [ngClass]="bookings.length === 0 ? 'fa-ban' : 'fa-check'">
-          </i>
-          Checkout
-        </button>
-      </ng-container>
-      <button class="btn btn-danger btn-sm" (click)="clearCart()">Clear Cart</button>
+      <div class="d-flex justify-content-between align-items-center my-3">
+        <button class="btn btn-success btn-sm"  [routerLink]="['/']"><i class="fa-solid fa-arrow-left"></i> Booking </button>
+        <ng-container  *ngIf="bookings$ | async as bookings">
+          <button 
+            class="btn btn-light justify-content-end"
+            [routerLink]="['/checkout']"
+            [disabled]="bookings.length === 0">
+            <i 
+              class="fa-solid" 
+              [ngClass]="bookings.length === 0 ? 'fa-ban' : 'fa-check'">
+            </i>
+            Checkout
+          </button>
+        </ng-container>
+      </div>      
     </div>
 </main>

@@ -29,7 +29,7 @@ export class BookingFormComponent {
   @Output() formClosed = new EventEmitter<void>();
 
   // -------- SIGNALS --------
-  // Reactive list of time slots available for booking on the selected day
+  // Reactive list of time slots available for booking on the selected day for dev purposes only
    /*availableSlots = signal([
     { start: '08:00 AM', end: '10:00 AM', price: '$90', available: true },
     { start: '10:00 AM', end: '12:00 PM', price: '$90', available: true },
@@ -38,6 +38,7 @@ export class BookingFormComponent {
     { start: '16:00 PM', end: '18:00 PM', price: '$160', available: false },
     { start: '18:00 PM', end: '20:00 PM', price: '$180', available: false },
   ]);*/
+  /** live version of slot management */
    availableSlots = signal<Slot[]>([]);
 
   // Signal that tracks which time slot is currently selected by the user
@@ -48,7 +49,7 @@ export class BookingFormComponent {
 
   constructor(private fb: FormBuilder, private store:Store, private bookingService:BookingService) {
      // Form initialization
-    console.log("Constructor", this.studioPrice); // This will be null at first
+    //console.log("Constructor", this.studioPrice); // This will be null at first
     this.bookingForm = this.fb.group({
       title: '',                              // Title of the booking, often studio name
       date: ['', Validators.required],        // Date of the booking, required field
@@ -65,7 +66,7 @@ export class BookingFormComponent {
 
      // When studioPrice changes (i.e. when selected studio is set), update price and slot list
     if (changes['studioPrice'] && this.studioPrice !== null) {
-      console.log("OnChange",this.studioPrice);
+
       this.bookingForm.get('price')?.setValue(this.studioPrice);
       // Update time slots using the new studio price
       this.availableSlots.set([
@@ -123,7 +124,7 @@ export class BookingFormComponent {
             this.availableSlots.set(slots); // ✅ update signal with fetched slots
           },
           error: (err) => {
-            console.error('Error fetching slots:', err);
+           // console.error('Error fetching slots:', err);
             this.availableSlots.set([]); // fallback to empty
           }
         });
@@ -153,8 +154,6 @@ export class BookingFormComponent {
         studioId: formValues.studioId,
         price: formValues.price
       };
-
-      console.log("Booking Submitted:", booking);
       this.store.dispatch(BookingActions.addBooking({booking}));
       this.formClosed.emit();
 

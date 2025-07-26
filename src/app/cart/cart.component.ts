@@ -22,7 +22,7 @@ export class CartComponent implements OnInit {
     this.bookings$ = store.pipe(
       select('bookings'),
       tap( bookings =>{
-        console.log("Updating Bookings", bookings);
+        //console.log("Updating Bookings", bookings);
         localStorage.setItem('bookings',JSON.stringify(bookings))
       })
     );

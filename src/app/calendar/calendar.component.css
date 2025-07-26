@@ -6,11 +6,10 @@
 }
 .dashboard{
   position: relative;
-  height: 100vh;
   overflow: hidden;
 }
 .sidebar-form {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   width: 35%;
