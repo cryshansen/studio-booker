@@ -1,0 +1,119 @@
+{
+  "2025-07-25": [
+    {
+      "name": "Sophie",
+      "purpose": "Music Video",
+      "start": "16:00",
+      "end": "18:00",
+      "studio_id": 2
+    },
+    {
+      "name": "Ava",
+      "purpose": "Music Video",
+      "start": "10:00",
+      "end": "12:00",
+      "studio_id": 1
+    },
+    {
+      "name": "Marcus",
+      "purpose": "Rehearsal",
+      "start": "14:00",
+      "end": "16:00",
+      "studio_id": 2
+    }
+  ],
+  "2025-07-26": [
+    {
+      "name": "Elena",
+      "purpose": "Portrait",
+      "start": "12:00",
+      "end": "14:00",
+      "studio_id": 3
+    },
+    {
+      "name": "Jay",
+      "purpose": "Product Shoot",
+      "start": "08:00",
+      "end": "10:00",
+      "studio_id": 2
+    }
+  ],
+  "2025-07-27": [
+    {
+      "name": "Elena",
+      "purpose": "Music Video",
+      "start": "12:00",
+      "end": "14:00",
+      "studio_id": 3
+    }
+  ],
+  "2025-07-28": [
+    {
+      "name": "Noah",
+      "purpose": "Rehearsal",
+      "start": "12:00",
+      "end": "14:00",
+      "studio_id": 1
+    },
+    {
+      "name": "Marcus",
+      "purpose": "Portrait",
+      "start": "12:00",
+      "end": "14:00",
+      "studio_id": 3
+    },
+    {
+      "name": "Elena",
+      "purpose": "Rehearsal",
+      "start": "10:00",
+      "end": "12:00",
+      "studio_id": 2
+    }
+  ],
+  "2025-07-29": [
+    {
+      "name": "Marcus",
+      "purpose": "Rehearsal",
+      "start": "14:00",
+      "end": "16:00",
+      "studio_id": 2
+    },
+    {
+      "name": "Jay",
+      "purpose": "Product Shoot",
+      "start": "16:00",
+      "end": "18:00",
+      "studio_id": 1
+    }
+  ],
+  "2025-07-30": [
+    {
+      "name": "Ava",
+      "purpose": "Music Video",
+      "start": "12:00",
+      "end": "14:00",
+      "studio_id": 2
+    },
+    {
+      "name": "Ava",
+      "purpose": "Product Shoot",
+      "start": "14:00",
+      "end": "16:00",
+      "studio_id": 1
+    },
+    {
+      "name": "Marcus",
+      "purpose": "Rehearsal",
+      "start": "10:00",
+      "end": "12:00",
+      "studio_id": 1
+    },
+    {
+      "name": "Liam",
+      "purpose": "Rehearsal",
+      "start": "14:00",
+      "end": "16:00",
+      "studio_id": 2
+    }
+  ]
+}
