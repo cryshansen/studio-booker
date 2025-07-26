@@ -2,9 +2,10 @@
 :host {
   display: block;
   padding: 1rem;
+  
 }
 .dashboard{
- position: relative;
+  position: relative;
   height: 100vh;
   overflow: hidden;
 }
@@ -31,6 +32,43 @@
   opacity:1;
   pointer-events:auto;
 }
+.disabled,
+.day.disabled {
+  color: #999999;
+  background-color: #eaeaea;
+  cursor: not-allowed;
+  pointer-events: none; /* disables click */
+}
+
+.day.clickable {
+  cursor: pointer;
+}
+
+/* these day coloring below is not registering for the color for some reason */
+.heavy-booked,
+.fc-day.heavy-booked {
+  background-color: #f8d7da !important;
+}
+.medium-booked,
+.day.medium-booked {
+  background-color: #fff3cd !important;
+}
+.light-booked,
+.fc-day.light-booked .fc-daygrid-day-frame.fc-scrollgrid-sync-inner {
+  background-color: #d4edda !important;
+}
+
+/* this pointer doesnt register */
+.fc-daygrid-day-frame.fc-scrollgrid-sync-inner { background-color: purple;}
+
+.legend-box {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+
 /* 🔁 Responsive: full screen on mobile */
 @media (max-width: 768px) {
   .sidebar-form {

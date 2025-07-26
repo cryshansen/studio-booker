@@ -15,8 +15,7 @@
         <ul class="list-group mb-3">
          <li *ngFor="let item of cartItems" class="list-group-item d-flex justify-content-between lh-sm">
             <div>
-              <h6 class="my-0">{{ item.studioName }}</h6>
-              <small class="text-muted">{{ item.slot }} ({{ item.price | currency }})</small>
+              <small class="text-muted">{{ item.bdate }} {{ item.btime }} ({{ item.price | currency }})</small>
             </div>
             <span class="text-muted">{{ item.price | currency }}</span>
           </li>

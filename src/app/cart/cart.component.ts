@@ -1,49 +1,41 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-
-import { CartService } from '../services/cart.service';
-import { ContactPrefillService } from '../services/contact-prefill.service';
-
-
+import { Store, select } from '@ngrx/store';
+import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Booking } from '../models/booking';
+import { removeBooking,clearBookings } from '../store/bookings/booking.actions';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  standalone: true,
   selector: 'app-cart',
-  imports: [CommonModule, RouterModule],
+  standalone: true,
+  imports: [CommonModule,RouterLink],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.css'
 })
-export class CartComponent {
- cartItems: any[] = [];
+export class CartComponent implements OnInit {
 
-  constructor(private cartService: CartService, private contactPrefill:ContactPrefillService) {}
+  bookings$: Observable<Booking[]>;
+
+  constructor(private store: Store<{ bookings: Booking[] }>) {
+    this.bookings$ = store.pipe(
+      select('bookings'),
+      tap( bookings =>{
+        console.log("Updating Bookings", bookings);
+        localStorage.setItem('bookings',JSON.stringify(bookings))
+      })
+    );
+  }
   ngOnInit() {
-    this.cartItems = this.cartService.getCartItems();
-    console.log('🛒 Cart contents:', this.cartItems);
-     const bookingSummary = this.cartItems.map(item => {
-      const studio = item.title || 'Studio';
-      const date = item.date || '';
-      const slot = item.slot || '';
-      return `${studio} on ${date} (${slot})`;
-    })
-    .join(', ');
-
-    this.contactPrefill.setPrefill({ 
-        subject: `Booking Inquiry for: ${bookingSummary}`,
-        message: `Hello, I'm inquiring about the following bookings: ${bookingSummary}`
-    });
+   
   }
-  
- remove(index:number){
-  console.log(index);
-  this.cartService.removeItem(index);
-  this.cartItems = this.cartService.getCartItems(); // refresh after removal
- }
-
-  getTotal(): number {
-    return this.cartItems.reduce((total, item) => total + (item.price || 0), 0);
+  clearCart(){
+    this.store.dispatch(clearBookings());
   }
-
-
+  remove(id: number): void {
+    console.log("Remove id ",id)
+    this.store.dispatch(removeBooking({ id }));
+    
+  }
 }

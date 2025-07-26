@@ -1,12 +1,12 @@
-<h2>Create a Booking</h2>
+<h2>Create a Booking for {{ studioName }}</h2>
 
 <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
   <label>
     Event Title:
-    <input type="text" formControlName="title" />
-    <div *ngIf="bookingForm.get('title')?.touched && bookingForm.get('title')?.invalid" class="text-danger">
+    <input type="text" formControlName="title" readonly />
+    <!--<div *ngIf="bookingForm.get('title')?.touched && bookingForm.get('title')?.invalid" class="text-danger">
       Title is required.
-    </div>
+    </div> -->
   </label>
   <br />
 
@@ -33,9 +33,11 @@
   <div *ngIf="bookingForm.get('slot')?.touched && bookingForm.get('slot')?.invalid" class="text-danger">
     Please select a time slot.
   </div>
+
   <input type="hidden" formControlName="slot" />
   <input type="hidden" formControlName="studioId" />
   <input type="hidden" formControlName="price" />
+
   <br />
   <button type="button" class="btn btn-secondary" (click)="formClosed.emit()">Cancel</button>
   <button type="submit" [disabled]="bookingForm.invalid">Book Now</button>

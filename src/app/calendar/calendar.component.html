@@ -1,12 +1,14 @@
 
-<div class="container dashboard mt-5">
+<div class="container dashboard mt-5" >
   <a href="" class="btn btn-link"><i class="fa fa-arrow-left"></i> Back to Studios</a>
   <h2 class="mb-4">{{studioName}} Studio Calendar (Studio ID: {{ studioId }})</h2>
-
-  <full-calendar
-    [options]="calendarOptions" >
-  </full-calendar>
+  <div *ngIf="calendarReady">
+    <full-calendar
+      [options]="calendarOptions" >
+    </full-calendar>
+  </div>
 </div>
+<div class="calendar-legend container mt-5"><h6 class="mb-2">Booking Status Legend:</h6><ul class="list-inline"><li class="list-inline-item"><span class="legend-box  bg-white border pe-2 me-2"></span> Empty / Available</li><li class="list-inline-item"><span class="legend-box light-booked pe-2 me-2"></span> Lightly Booked</li><li class="list-inline-item"><span class="legend-box heavy-booked  text-white pe-2 me-2"></span> Heavily Booked</li><li class="list-inline-item"><span class="legend-box disabled text-white pe-2 me-2"></span> Past Month Day</li></ul></div>
   <!-- Slide-in Booking Form -->
   <div class="sidebar-form" [class.show]="showForm">
     <app-booking-form 

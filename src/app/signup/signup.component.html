@@ -5,32 +5,53 @@
   </h1>
   <h2 class="mb-4 text-center">Sign Up</h2>
 
-  <form>
+  <form  class="needs-validation" novalidate [formGroup]="signupForm" (ngSubmit)="onSubmit()">
     <div class="mb-3">
       <label for="firstName" class="form-label">First Name</label>
-      <input type="text" id="firstName" class="form-control" placeholder="Enter your first name">
+      <input type="text" id="firstName" formControlName="firstName" [class.is-invalid]="signupForm.get('firstName')?.invalid && signupForm.get('firstName')?.touched"  class="form-control" placeholder="Enter your first name">
+        <div class="invalid-feedback">
+          Valid first name is required.
+        </div>
     </div>
 
     <div class="mb-3">
       <label for="lastName" class="form-label">Last Name</label>
-      <input type="text" id="lastName" class="form-control" placeholder="Enter your last name">
+      <input type="text" id="lastName" formControlName="lastName" [class.is-invalid]="signupForm.get('lastName')?.invalid && signupForm.get('lastName')?.touched"  class="form-control" placeholder="Enter your last name">
+       <div class="invalid-feedback">
+          Valid Last name is required.
+        </div>
     </div>
 
     <div class="mb-3">
       <label for="email" class="form-label">Email address</label>
-      <input type="email" id="email" class="form-control" placeholder="Enter your email">
+      <input type="email" id="email" formControlName="email" [class.is-invalid]="signupForm.get('email')?.invalid && signupForm.get('email')?.touched" class="form-control" placeholder="Enter your email">
+       <div class="invalid-feedback">
+          Valid  email is required.
+        </div>
     </div>
 
     <div class="mb-3">
       <label for="password" class="form-label">Password</label>
-      <input type="password" id="password" class="form-control" placeholder="Create a password">
+      <div class="input-group">     
+         <input [type]="showPassword ? 'text' : 'password'"  id="password" formControlName="password" [class.is-invalid]="signupForm.get('password')?.invalid && signupForm.get('password')?.touched"  class="form-control" placeholder="Create a password">
+        <button type="button" class="btn btn-outline-secondary" (click)="showPassword = !showPassword"><i [class]="showPassword ? 'fa fa-eye': 'fa fa-eye-slash'"></i></button>
+      </div>
       <div id="" class="form-text"><small class="text-muted">
         Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.</small>
      </div>
+      <div class="invalid-feedback" *ngIf="signupForm.get('password')?.hasError('passwordStrength')">
+          Valid password doesnt contain the proper requirements
+        </div>
     </div>
     <div class="mb-4">
       <label for="confirmPassword" class="form-label">Confirm Password</label>
-      <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm your password">
+      <div class="input-group">   
+        <input [type]="showConfirmPassword ? 'text' : 'password'"  id="confirmPassword"  formControlName="confirmPassword" [class.is-invalid]="signupForm.get('confirmPassword')?.invalid && signupForm.get('confirmPassword')?.touched" class="form-control" placeholder="Confirm your password">
+        <button type="button" class="btn btn-outline-secondary" (click)="showConfirmPassword = !showConfirmPassword"> <i [class]="showConfirmPassword ? 'fa fa-eye': 'fa fa-eye-slash'"></i> </button>
+      </div>
+      <div class="invalid-feedback"*ngIf="signupForm.hasError('passwordMismatch') && signupForm.get('confirmPassword')?.touched">
+        Password must match
+      </div>
     </div>
 
     <button type="submit" class="btn btn-primary w-100">Sign Up</button>

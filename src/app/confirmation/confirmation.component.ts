@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { CartService } from '../services/cart.service';
+import { Booking } from '../models/booking';
+import { Store, select } from '@ngrx/store';
+import { clearBookings } from '../store/bookings/booking.actions';
+import { Observable } from 'rxjs';
 import html2pdf from 'html2pdf.js';
+
+
 
 @Component({
   standalone: true,
@@ -12,15 +17,17 @@ import html2pdf from 'html2pdf.js';
   styleUrl: './confirmation.component.css'
 })
 export class ConfirmationComponent implements OnInit{
-
+  bookings$: Observable<Booking[]>;
+  cart: Booking[] = [];
 
   firstName = '';
   lastName = '';
   confirmationId = '';
-  cart: any[] = [];
   total = 0;
 
-  constructor(private router: Router, private cartService: CartService) {
+  constructor(private router: Router, private store: Store<{ bookings: Booking[] }>) {
+
+    this.bookings$ = this.store.select('bookings');
     const nav = this.router.getCurrentNavigation();
     const state = nav?.extras?.state;
 
@@ -32,8 +39,11 @@ export class ConfirmationComponent implements OnInit{
       this.total = state['total'];
     }
   }
+
   ngOnInit() {
-    this.cartService.clearCart(); // Clear when confirmation page loads
+    // Dispatch the action to clear the store after confirmation
+    this.store.dispatch(clearBookings());
+  
   }
   printConfirmation() {
     //window.print();
