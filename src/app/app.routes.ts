@@ -8,6 +8,7 @@ import { CartComponent } from './cart/cart.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { CheckoutComponent } from './checkout/checkout.component'; 
 import { StudiosComponent } from './studios/studios.component';
+import { VerifyComponent } from './pages/verify/verify.component';
 
 
 export const routes: Routes = [
@@ -20,4 +21,6 @@ export const routes: Routes = [
       { path: 'cart', component: CartComponent },
       { path: 'checkout',  component: CheckoutComponent },
       { path: '', component: StudiosComponent },
+      { path: 'verify', component:VerifyComponent},
+
 ];

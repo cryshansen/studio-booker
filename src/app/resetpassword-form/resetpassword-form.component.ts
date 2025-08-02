@@ -1,39 +1,50 @@
 import { Component, Input,OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormGroup, FormBuilder,Validators, ReactiveFormsModule, AbstractControl,ValidationErrors } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder,ReactiveFormsModule, Validators,ValidationErrors, AbstractControl } from '@angular/forms';
 import { RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+
+
 
 import { UserService } from '../services/user.service';
 
-
-export interface UserAccount {
-    id:number; //pass time numeric //or pass array id.
-    firstname: string;
-    lastName: string;
-    email: string;
-    password:string;
-    confirmPassword: string;
+interface ResetUser {
+  email: string;
+  password: string;
+  confirmpswd: string;
 }
 
-
 @Component({
-  selector: 'app-signup',
-  imports: [CommonModule,ReactiveFormsModule, RecaptchaV3Module],
-  templateUrl: './signup.component.html',
-  styleUrl: './signup.component.css'
+  selector: 'app-resetpassword-form',
+  imports: [CommonModule,ReactiveFormsModule,RecaptchaV3Module],
+  templateUrl: './resetpassword-form.component.html',
+  styleUrl: './resetpassword-form.component.css'
 })
-export class SignupComponent  implements OnInit {
 
-  @Input() firstName:string | null = null;
-  @Input() lastName: string | null = null;
+/**
+ * User clicks the link → sent to resetpassword-form page.  endpoint ->resetnewpass as post event
+capture token
+Validate token and expiration, then allow password reset.
+
+Clear token after use
+ */
+export class ResetpasswordFormComponent implements OnInit {
   @Input() suemail: string | null = null;
   @Input() password: string | null = null;
   @Input() confirmPassword: string | null = null;
-  
+  data:any;
+  user:ResetUser = {
+    email:'',
+    password:'',
+    confirmpswd:''
+  }
+  captchaReady = true; // assume ready (for mock up to integrate )
+  captchaToken: string = '';
+
+  resetpassForm:  FormGroup;
   showPassword: boolean = false;
   showConfirmPassword: boolean=false;
   passwordTouched =false;
-
+  
   passwordRules = {
     lengthValid: false,
     containsLetter: false,
@@ -42,29 +53,19 @@ export class SignupComponent  implements OnInit {
   };
 
 
-
-
-  captchaReady = true; // assume ready (for mock up to integrate )
-  captchaToken: string = '';
-  signupForm: FormGroup; // in order to use in html form you need to add reactiveFormModule to imports
-  data: any;
-
-
   constructor(private fb:FormBuilder, private userService:UserService, private recaptchaV3Service: ReCaptchaV3Service){
-    this.signupForm = this.fb.group({
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
+    this.resetpassForm = this.fb.group({
         suemail: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, this.passwordStrengthValidator]],
         confirmPassword: ['', Validators.required],
       },{
         validators: this.passwordMatchValidator
       });
+
   }
 
   ngOnInit(){
-    this.signupForm.get('password')?.valueChanges.subscribe(password => {
-
+    this.resetpassForm.get('password')?.valueChanges.subscribe(password => {
       this.passwordTouched = password.length > 0;
       //this.updatePasswordRules(value || '');
       this.passwordRules.lengthValid = password.length >= 8 && password.length <= 20;
@@ -103,43 +104,35 @@ export class SignupComponent  implements OnInit {
     this.passwordRules.noSpecialsOrSpaces = /^[A-Za-z0-9]+$/.test(password);
   }
 
-
   onSubmit(){
-
-    if (this.signupForm.invalid) {
-      // Mark all controls as touched to trigger validation display
-      this.signupForm.markAllAsTouched();
-      return;
-    }
-    this.recaptchaV3Service.execute('signup').subscribe({
-      next: (token) => {
-        this.captchaToken = token;
-        const formValues = this.signupForm.value;
-        const userAccount:UserAccount = {
-            ...formValues,
-            id:formValues.id, //pass time numeric //or pass array id.
-            firstname: formValues.firstName,
-            lastName: formValues.lastName,
-            email: formValues.suemail,
-            password:formValues.password,
-            confirmPassword: formValues.confirmPassword
-        }
-        this.createNewUser(userAccount, token);
-      // Proceed with useracount —  could be submitted to server here
-        console.log('✅ Form is valid. Proceeding to account view..');
-        //need to validate the email / passwords to == themselves. which we can get from the promo code on how to implement for autoupdates 
-        console.log("userAccount Submitted:", userAccount);
-      },
-      error:(err) =>{
-        console.error('reCaptcha error',err);
-      }
+    if (this.resetpassForm.invalid) {
+         // Mark all controls as touched to trigger validation display
+         this.resetpassForm.markAllAsTouched();
+         return;
+       }
+       this.recaptchaV3Service.execute('signup').subscribe({
+         next: (token) => {
+           this.captchaToken = token;
+           const formValues = this.resetpassForm.value;
+           const userAccount:ResetUser = {
+               email: formValues.suemail,
+               password:formValues.password,
+               confirmpswd: formValues.confirmPassword,
+           }
+           this.createNewUser(userAccount, token);
+         // Proceed with useracount —  could be submitted to server here
+           console.log('✅ Form is valid. Proceeding to account view..');
+           //need to validate the email / passwords to == themselves. which we can get from the promo code on how to implement for autoupdates 
+           console.log("userAccount Submitted:", userAccount);
+         },
+         error:(err) =>{
+           console.error('reCaptcha error',err);
+         }
 
     });
-//1234Cj_Rx
-     
   }
 
-  async createNewUser(userAccount:UserAccount, token:string){
+  async createNewUser(userAccount:ResetUser, token:string){
     try{
          // const token = await firstValueFrom(this.recaptchaV3Service.execute('login'));
             
@@ -147,12 +140,9 @@ export class SignupComponent  implements OnInit {
          //console.log('CAPTCHA token:', token);
           // Construct your payload
           const payload = {
-            username: userAccount.email,
-            firstname: userAccount.firstname,
-            lastName: userAccount.lastName,
             email: userAccount.email,
             password:userAccount.password,
-            confirmPassword: userAccount.confirmPassword,
+            confirmPassword: userAccount.confirmpswd,
             token: token
           };
           // the real url endpoint
@@ -167,6 +157,5 @@ export class SignupComponent  implements OnInit {
             console.error('Failed to load data in componenet', error);
         }
   }
-
 
 }

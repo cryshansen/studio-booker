@@ -57,7 +57,7 @@ export class BookingFormComponent {
       studioId: [this.studioId],              // Studio ID tied to the booking
       price: [this.price]                     // Price of the booking
     });
-
+// in here somewhere we need to add the front end captcha 6Ldfy5MrAAAAAEjCmYXfbtCc1wqb05vJ-5-yEUKm
 
   }
 

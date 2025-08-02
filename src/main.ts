@@ -2,6 +2,10 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
 import { StoreModule, provideStore, MetaReducer } from '@ngrx/store';
+import { RECAPTCHA_V3_SITE_KEY, ReCaptchaV3Service } from 'ng-recaptcha';
+
+
+
 import { bookingReducer } from './app/store/bookings/booking.reducer';
 import { promoReducer } from './app/store/promocodes/promocodes.reducer';
 import { localStorageSync } from 'ngrx-store-localstorage';
@@ -28,6 +32,8 @@ bootstrapApplication(AppComponent, {
       ...appConfig.providers,
       provideStore({ bookings: bookingReducer, promo:promoReducer },{ metaReducers}),
       provideHttpClient(),
+      { provide: RECAPTCHA_V3_SITE_KEY,useValue: '6Ldfy5MrAAAAAEjCmYXfbtCc1wqb05vJ-5-yEUKm' },
+      ReCaptchaV3Service,
     ]
 })
   .catch((err) => console.error(err));

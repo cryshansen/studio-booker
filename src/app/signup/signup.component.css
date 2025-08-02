@@ -1,0 +1,32 @@
+.password-requirements {
+  list-style: none;
+  padding: 0;
+  margin-top: 1em;
+}
+
+.password-requirements li {
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.password-requirements li span {
+  width: 20px;
+  display: inline-block;
+  text-align: center;
+  font-weight: bold;
+}
+
+.password-requirements li.valid {
+  color: green;
+}
+
+.password-requirements .checked {
+  color: green;
+}
+
+.password-requirements .neutral {
+  color: #ccc;
+}
