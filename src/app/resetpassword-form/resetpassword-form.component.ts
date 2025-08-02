@@ -119,7 +119,7 @@ export class ResetpasswordFormComponent implements OnInit {
                password:formValues.password,
                confirmpswd: formValues.confirmPassword,
            }
-           this.createNewUser(userAccount, token);
+           this.resetUser(userAccount, token);
          // Proceed with useracount —  could be submitted to server here
            console.log('✅ Form is valid. Proceeding to account view..');
            //need to validate the email / passwords to == themselves. which we can get from the promo code on how to implement for autoupdates 
@@ -132,7 +132,7 @@ export class ResetpasswordFormComponent implements OnInit {
     });
   }
 
-  async createNewUser(userAccount:ResetUser, token:string){
+  async resetUser(userAccount:ResetUser, token:string){
     try{
          // const token = await firstValueFrom(this.recaptchaV3Service.execute('login'));
             
