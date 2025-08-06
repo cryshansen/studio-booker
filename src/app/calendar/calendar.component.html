@@ -2,6 +2,7 @@
 <div class="container dashboard mt-5" >
   <a href="" class="btn btn-link"><i class="fa fa-arrow-left"></i> Back to Studios</a>
   <h2 class="mb-4">{{studioName}} Studio Calendar (Studio ID: {{ studioId }})</h2>
+  <app-spinner *ngIf="loading"></app-spinner>
   <div *ngIf="calendarReady">
     <full-calendar
       [options]="calendarOptions" >

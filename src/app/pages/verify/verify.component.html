@@ -2,11 +2,7 @@
     <h1 class="pt-5 pb-5"> Email Verification </h1>
         <h6 class="mb-4">We just need to verify the account.</h6>
         <div class="verify-wrapper">
-            <div *ngIf="loading" class="spinner">
-                <p>Verifying your email, please wait...</p>
-                <div class="loader"></div> <!-- Custom or Bootstrap spinner -->
-            </div>
-
+            <app-spinner *ngIf="loading"> <p>Verifying your email, please wait...</p></app-spinner>
              <div *ngIf="isSuccess; else errorBlock" class="text-success">
                 <p>{{ message }}</p>
                 <a class="btn btn-primary mt-3" routerLink="/signin">Log in</a>

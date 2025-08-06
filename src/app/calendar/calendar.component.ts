@@ -12,12 +12,13 @@ import bootstrap5Plugin from '@fullcalendar/bootstrap5';
 import { CartService } from '../services/cart.service';
 import { ContactPrefillService } from '../services/contact-prefill.service';
 import { BookingService } from '../services/booking.service';
+import { SpinnerComponent } from "../spinner/spinner.component";
 
 
 @Component({
   standalone: true,
   selector: 'app-calendar',
-  imports: [CommonModule, FullCalendarModule, BookingFormComponent],
+  imports: [CommonModule, FullCalendarModule, BookingFormComponent, SpinnerComponent],
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css']
 })
@@ -30,7 +31,7 @@ export class CalendarComponent implements OnInit {
   selectedDate: string | null = null; 
   selectedEvent: any = null;
   showForm = false;
-
+  loading=false;
   @Output() daySelected = new EventEmitter<string>();
   @Output() eventClicked = new EventEmitter<any>();
 
@@ -39,6 +40,7 @@ export class CalendarComponent implements OnInit {
   constructor(private route: ActivatedRoute, private cartService: CartService, private contactPrefill: ContactPrefillService, private bookingService: BookingService) {}
 
   ngOnInit(): void {
+
     const today = new Date();
     const twoDaysLater = new Date();
     twoDaysLater.setDate(today.getDate() + 2);
@@ -67,11 +69,7 @@ export class CalendarComponent implements OnInit {
         console.log('Booking summary:', this.daysWithBookings);
         console.log(typeof Object.keys(this.daysWithBookings)[0]); // should print "string"
 
-
-          
-     
-
-      this.calendarOptions = {
+        this.calendarOptions = {
             plugins: [dayGridPlugin, bootstrap5Plugin,interactionPlugin],
             initialView: 'dayGridMonth',
             validRange:{
@@ -102,7 +100,7 @@ export class CalendarComponent implements OnInit {
           this.calendarReady = true;
       });
 
-
+      this.loading=false;
     });
   }
 
@@ -191,7 +189,7 @@ export class CalendarComponent implements OnInit {
     console.log('🗓 Event clicked:', event.title);
   }
   handleBooking(data: any){
-     console.log('🗓 Booking Data:', data);
+    console.log('🗓 Booking Data:', data);
     this.cartService.addToCart(data);
     this.closeForm();
   }

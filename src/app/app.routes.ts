@@ -9,7 +9,8 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { CheckoutComponent } from './checkout/checkout.component'; 
 import { StudiosComponent } from './studios/studios.component';
 import { VerifyComponent } from './pages/verify/verify.component';
-
+import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
+import { ResetpasswordFormComponent } from './resetpassword-form/resetpassword-form.component';
 
 export const routes: Routes = [
       { path: 'admin-dashboard', component: AdminDashboardComponent },
@@ -22,5 +23,7 @@ export const routes: Routes = [
       { path: 'checkout',  component: CheckoutComponent },
       { path: '', component: StudiosComponent },
       { path: 'verify', component:VerifyComponent},
+      { path: 'passwordreset',component:ResetpasswordComponent},
+      { path: 'resetpassword',component:ResetpasswordFormComponent}
 
 ];

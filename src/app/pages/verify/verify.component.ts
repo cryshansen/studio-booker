@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import { UserService } from '../../services/user.service';
-
+import { SpinnerComponent } from '../../spinner/spinner.component';
 @Component({
   selector: 'app-verify',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SpinnerComponent],
   templateUrl: './verify.component.html',
   styleUrl: './verify.component.css'
 })
@@ -15,12 +15,14 @@ export class VerifyComponent implements OnInit{
   loading=true;
   isSuccess = false;
 
-//entrypoint  'https://booker.crystalhansenartographic.com/verify?token=e9a18f02b34fb36f01827d8e22dc585a&email=info%40ecry.com,
+//entrypoint  'https://domain/verify?token=e9a18f02b34fb36f01827d8e22dc585a&email=info%40ecry.com,
 
 
   constructor(private route: ActivatedRoute,private userService:UserService) {}
 
   async ngOnInit(): Promise<void> {
+   
+
     const token = this.route.snapshot.queryParamMap.get('token');
     const email = this.route.snapshot.queryParamMap.get('email');
     if (!token || !email) {
@@ -31,6 +33,7 @@ export class VerifyComponent implements OnInit{
 
 
     if (token && email) {
+
       try{
           const payload = {
             token: token, //e9a18f02b34fb36f01827d8e22dc585a

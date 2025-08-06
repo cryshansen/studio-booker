@@ -6,12 +6,13 @@ import * as BookingActions from '../store/bookings/booking.actions';
 import { Booking } from '../models/booking';
 import { Slot } from '../models/slot';
 import { BookingService } from '../services/booking.service';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 
 @Component({
   standalone: true,
   selector: 'app-booking-form',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent],
   templateUrl: './booking-form.component.html',
   styleUrl: 'booking-form.component.css'
 })
@@ -45,7 +46,7 @@ export class BookingFormComponent {
   selectedSlot = signal<string | null>(null);
    // -------- FORM GROUP --------
   bookingForm: FormGroup;
-
+  loading=false;
 
   constructor(private fb: FormBuilder, private store:Store, private bookingService:BookingService) {
      // Form initialization
@@ -63,7 +64,7 @@ export class BookingFormComponent {
 
   // -------- LIFECYCLE HOOK --------
   ngOnChanges(changes: SimpleChanges): void {
-
+    
      // When studioPrice changes (i.e. when selected studio is set), update price and slot list
     if (changes['studioPrice'] && this.studioPrice !== null) {
 
@@ -117,11 +118,13 @@ export class BookingFormComponent {
    * ✅ Fetch time slots from the backend for the current studio and date.
    */
   fetchSlots(): void {
+
     if (this.studioId && this.selectedDate) {
       this.bookingService.getAvailableSlots(this.studioId, this.selectedDate)
         .subscribe({
           next: (slots) => {
             this.availableSlots.set(slots); // ✅ update signal with fetched slots
+            this.loading=false;
           },
           error: (err) => {
            // console.error('Error fetching slots:', err);
@@ -143,6 +146,7 @@ export class BookingFormComponent {
 
 
   onSubmit() {
+    this.loading=true;
     if (this.bookingForm.valid) {
       const formValues = this.bookingForm.value;
       const booking: Booking = {
@@ -155,6 +159,7 @@ export class BookingFormComponent {
         price: formValues.price
       };
       this.store.dispatch(BookingActions.addBooking({booking}));
+      this.loading=false;
       this.formClosed.emit();
 
     }

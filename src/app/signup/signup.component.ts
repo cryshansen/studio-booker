@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder,Validators, ReactiveFormsModule, AbstractControl
 import { RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
 
 import { UserService } from '../services/user.service';
-
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 export interface UserAccount {
     id:number; //pass time numeric //or pass array id.
@@ -15,10 +15,10 @@ export interface UserAccount {
     confirmPassword: string;
 }
 
-
+//VDB3456cs
 @Component({
   selector: 'app-signup',
-  imports: [CommonModule,ReactiveFormsModule, RecaptchaV3Module],
+  imports: [CommonModule,ReactiveFormsModule, RecaptchaV3Module, SpinnerComponent],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
@@ -48,7 +48,10 @@ export class SignupComponent  implements OnInit {
   captchaToken: string = '';
   signupForm: FormGroup; // in order to use in html form you need to add reactiveFormModule to imports
   data: any;
-
+  message: string = ' ';
+  isSuccess= false;
+  //spinner 
+  loading = false;
 
   constructor(private fb:FormBuilder, private userService:UserService, private recaptchaV3Service: ReCaptchaV3Service){
     this.signupForm = this.fb.group({
@@ -125,21 +128,26 @@ export class SignupComponent  implements OnInit {
             confirmPassword: formValues.confirmPassword
         }
         this.createNewUser(userAccount, token);
+        this.message = 'Signing up please wait...';
+        this.isSuccess= true;
+
       // Proceed with useracount —  could be submitted to server here
         console.log('✅ Form is valid. Proceeding to account view..');
         //need to validate the email / passwords to == themselves. which we can get from the promo code on how to implement for autoupdates 
         console.log("userAccount Submitted:", userAccount);
+        
       },
       error:(err) =>{
         console.error('reCaptcha error',err);
       }
 
     });
-//1234Cj_Rx
+// 1234CjRx
      
   }
 
   async createNewUser(userAccount:UserAccount, token:string){
+    this.loading = true;
     try{
          // const token = await firstValueFrom(this.recaptchaV3Service.execute('login'));
             
@@ -162,9 +170,12 @@ export class SignupComponent  implements OnInit {
     
           console.log('Backend response:', response);
           this.data = response;
-           
+          this.message = response.message || 'Reset process complete!';
+          this.isSuccess = response.success;
         }catch(error){
             console.error('Failed to load data in componenet', error);
+        }finally{
+          this.loading = false;
         }
   }
 

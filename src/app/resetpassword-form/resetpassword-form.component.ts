@@ -2,20 +2,22 @@ import { Component, Input,OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormBuilder,ReactiveFormsModule, Validators,ValidationErrors, AbstractControl } from '@angular/forms';
 import { RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { ActivatedRoute } from '@angular/router';
 
 
 
 import { UserService } from '../services/user.service';
+import { SpinnerComponent } from "../spinner/spinner.component";
 
 interface ResetUser {
-  email: string;
   password: string;
   confirmpswd: string;
+  tokenUrl: string;
 }
 
 @Component({
   selector: 'app-resetpassword-form',
-  imports: [CommonModule,ReactiveFormsModule,RecaptchaV3Module],
+  imports: [CommonModule, ReactiveFormsModule, RecaptchaV3Module, SpinnerComponent],
   templateUrl: './resetpassword-form.component.html',
   styleUrl: './resetpassword-form.component.css'
 })
@@ -33,18 +35,21 @@ export class ResetpasswordFormComponent implements OnInit {
   @Input() confirmPassword: string | null = null;
   data:any;
   user:ResetUser = {
-    email:'',
     password:'',
-    confirmpswd:''
+    confirmpswd:'',
+    tokenUrl:''
   }
   captchaReady = true; // assume ready (for mock up to integrate )
   captchaToken: string = '';
-
+  tokenFromUrl: string ='';
   resetpassForm:  FormGroup;
   showPassword: boolean = false;
   showConfirmPassword: boolean=false;
   passwordTouched =false;
-  
+  isSuccess=false;
+  message: string = '';
+  loading =false; //see verify logic for implementation if required
+
   passwordRules = {
     lengthValid: false,
     containsLetter: false,
@@ -53,9 +58,8 @@ export class ResetpasswordFormComponent implements OnInit {
   };
 
 
-  constructor(private fb:FormBuilder, private userService:UserService, private recaptchaV3Service: ReCaptchaV3Service){
+  constructor(private fb:FormBuilder, private userService:UserService, private recaptchaV3Service: ReCaptchaV3Service, private route:ActivatedRoute){
     this.resetpassForm = this.fb.group({
-        suemail: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, this.passwordStrengthValidator]],
         confirmPassword: ['', Validators.required],
       },{
@@ -65,6 +69,16 @@ export class ResetpasswordFormComponent implements OnInit {
   }
 
   ngOnInit(){
+    this.route.queryParams.subscribe(params => {
+      const tokenParam = params['token'];
+
+      if ( tokenParam) {
+        // Set email field
+        // Store token securely (maybe in a class variable)
+        this.tokenFromUrl = tokenParam;
+      }
+    });
+    //initialize subscriber to password field
     this.resetpassForm.get('password')?.valueChanges.subscribe(password => {
       this.passwordTouched = password.length > 0;
       //this.updatePasswordRules(value || '');
@@ -105,56 +119,73 @@ export class ResetpasswordFormComponent implements OnInit {
   }
 
   onSubmit(){
+   
     if (this.resetpassForm.invalid) {
          // Mark all controls as touched to trigger validation display
          this.resetpassForm.markAllAsTouched();
          return;
        }
-       this.recaptchaV3Service.execute('signup').subscribe({
-         next: (token) => {
+      //this.isSuccess =false;
+      //this.message = 'Resetting please wait...';
+
+      this.recaptchaV3Service.execute('newpasswordreset').subscribe({
+        next: (token) => {
            this.captchaToken = token;
            const formValues = this.resetpassForm.value;
            const userAccount:ResetUser = {
-               email: formValues.suemail,
                password:formValues.password,
                confirmpswd: formValues.confirmPassword,
+               tokenUrl: this.tokenFromUrl || ''
            }
+           
+           this.message= 'Sending a reset please wait...';
+           
            this.resetUser(userAccount, token);
          // Proceed with useracount —  could be submitted to server here
            console.log('✅ Form is valid. Proceeding to account view..');
            //need to validate the email / passwords to == themselves. which we can get from the promo code on how to implement for autoupdates 
            console.log("userAccount Submitted:", userAccount);
-         },
-         error:(err) =>{
+        },
+       error:(err) =>{
            console.error('reCaptcha error',err);
-         }
+       }
+      
 
     });
   }
 
   async resetUser(userAccount:ResetUser, token:string){
+    this.loading=true;
     try{
-         // const token = await firstValueFrom(this.recaptchaV3Service.execute('login'));
             
           // Send `token` to backend for verification
          //console.log('CAPTCHA token:', token);
           // Construct your payload
           const payload = {
-            email: userAccount.email,
             password:userAccount.password,
             confirmPassword: userAccount.confirmpswd,
+            tokenUrl: userAccount.tokenUrl,
             token: token
           };
           // the real url endpoint
-          const url ='https://crystalhansenartographic.com/api/index-users.php/users/signup';
+          const url ='https://crystalhansenartographic.com/api/index-users.php/users/resetnewpass';
     
           const response = await this.userService.postData(url, payload);
     
           console.log('Backend response:', response);
           this.data = response;
-           
+        //Backend response: {success: true, message: 'Your password has been reset!'}
+        // append a message to the div response.  see verify response
+        //  This is a do nothing logic exit for user 'ok' from alert and can style alertbox to look like a modal
+        // and then redirect to login page
+
+          this.message = response.message || 'Verification successful!';
+          this.isSuccess = response.success;
+          
         }catch(error){
             console.error('Failed to load data in componenet', error);
+        }finally{
+          this.loading=false;
         }
   }
 

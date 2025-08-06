@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component'; // or correct path
 import { SpinnerComponent } from './spinner/spinner.component';
 import { ContactModalComponent } from './contact-modal/contact-modal.component';
-import { VerifyComponent } from './pages/verify/verify.component';
+
 
 
 @Component({

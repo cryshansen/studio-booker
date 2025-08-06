@@ -1,5 +1,5 @@
 <h2>Create a Booking for {{ studioName }}</h2>
-
+<app-spinner *ngIf="loading"></app-spinner>
 <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
   <label>
     Event Title:

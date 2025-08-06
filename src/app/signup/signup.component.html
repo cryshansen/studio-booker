@@ -5,6 +5,14 @@
   </h1>
   <h2 class="mb-4 text-center">Sign Up</h2>
 
+    <app-spinner *ngIf="loading"></app-spinner>
+    <div *ngIf="isSuccess; else errorBlock" class="text-success">
+        <p>{{ message }}</p>
+     </div>
+    <ng-template #errorBlock>
+        <p class="text-danger">{{ message }}</p>
+    </ng-template>
+
   <form  class="needs-validation" novalidate [formGroup]="signupForm" (ngSubmit)="onSubmit()">
     <div class="mb-3">
       <label for="firstName" class="form-label">First Name</label>

@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
 
 import { UserService } from '../services/user.service';
-
+import { SpinnerComponent } from '../spinner/spinner.component';
 interface ResetUser {
   email: string;
 }
@@ -20,7 +20,7 @@ Send email with reset link including token and user ID (or email hash).
 
 @Component({
   selector: 'app-resetpassword',
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RecaptchaV3Module,RouterModule, SpinnerComponent],
   templateUrl: './resetpassword.component.html',
   styleUrl: './resetpassword.component.css'
 })
@@ -36,6 +36,9 @@ export class ResetpasswordComponent implements OnInit {
 
   captchaReady = true; // assume ready (for mock up to integrate )
   captchaToken: string = '';
+  message: string = ' ';
+  isSuccess= false;
+  loading = false;
 
   constructor(private userService:UserService, private recaptchaV3Service:ReCaptchaV3Service){}
 
@@ -45,7 +48,7 @@ export class ResetpasswordComponent implements OnInit {
 
   onSubmit(form:NgForm){
     if(!form.valid) return;
-    this.recaptchaV3Service.execute('signup').subscribe({
+    this.recaptchaV3Service.execute('resetpassword').subscribe({
       next: (token) => {
         this.captchaToken = token;
 
@@ -58,6 +61,7 @@ export class ResetpasswordComponent implements OnInit {
         this.getResetEmail(userAccount, this.captchaToken);
         console.log('✅ Form is valid. Proceeding to account view..');
         console.log("userAccount Submitted:", userAccount);
+
       },
       error: (err) => {
         console.error('reCaptcha error', err);
@@ -69,6 +73,7 @@ export class ResetpasswordComponent implements OnInit {
 
 
   async getResetEmail(userAccount:ResetUser, token:string){
+    this.loading = true;
       try{
            // const token = await firstValueFrom(this.recaptchaV3Service.execute('login'));
               
@@ -86,9 +91,17 @@ export class ResetpasswordComponent implements OnInit {
       
             console.log('Backend response:', response);
             this.data = response;
-             
+            //Backend response: {success: true, message: 'Your password request email was sent!'}
+            //append a message to the div response.
+            //  This is a do nothing  exit for user 'ok' from alert and can style alertbox to look like a modal
+            // and then redirect to booking page home
+
+          this.message = response.message || 'Reset process complete! Please check your inbox or contact us for support.';
+          this.isSuccess = response.success;
       }catch(error){
               console.error('Failed to load data in componenet', error);
+      }finally{
+        this.loading=false;
       }
   }
 

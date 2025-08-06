@@ -5,7 +5,7 @@ import { RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
 import { firstValueFrom } from 'rxjs';
 import { FormsModule, NgForm } from '@angular/forms';
 
-
+import { SpinnerComponent } from '../spinner/spinner.component';
 import { UserService } from '../services/user.service';
 
 interface SigninUser {
@@ -18,7 +18,7 @@ interface SigninUser {
 @Component({
   standalone: true,
   selector: 'app-signin',
-  imports: [CommonModule, RouterModule, RecaptchaV3Module, FormsModule], 
+  imports: [CommonModule, RouterModule, RecaptchaV3Module, FormsModule, SpinnerComponent ], 
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.css'
 })
@@ -32,8 +32,10 @@ export class SigninComponent {
 
   captchaToken: string | null = null;
   data: any;
-
-
+  message: string = '';
+  isSuccess= false;
+  //attach spinner flag
+  loading = false;
   onCaptchaResolved(token: string | null) {
     this.captchaToken = token;
   }
@@ -44,10 +46,14 @@ export class SigninComponent {
   onSubmit(form: NgForm) {
     if (form.valid) {
       this.getUserSignin();
+      this.message= 'Signing in please wait...';
+      this.isSuccess= true;
+
     }
   }
 
   async getUserSignin(){
+    this.loading=true;
     try{
       const token = await firstValueFrom(this.recaptchaV3Service.execute('login'));
         
@@ -67,9 +73,12 @@ export class SigninComponent {
 
       console.log('Backend response:', response);
       this.data = response;
-       
+      this.message = response.message || 'Reset process complete!';
+      this.isSuccess = response.success;
     }catch(error){
         console.error('Failed to load data in componenet', error);
+    }finally{
+      this.loading=false;
     }
   }
 }
